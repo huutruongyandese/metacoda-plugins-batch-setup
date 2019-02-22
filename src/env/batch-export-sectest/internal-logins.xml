@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<BatchConfig xmlns="http://metacoda.com/xsd/plugins-batchconfig-6"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://metacoda.com/xsd/plugins-batchconfig-6 http://metacoda.com/xsd/plugins-batchconfig-6.xsd"
+             taskClass="com.metacoda.smc.batch.InternalLoginReviewerSecTestExportTask"
+             sendExceptionEmail="${site.env.smtp.enabled}">
+    <!--
+    The SMTPConnection tag can be used to configure email alerts when significant
+    errors occur in the batch process. To use email alerts:
+        1) Configure the mail server settings you want to use in the SMTPConnection section below.
+        2) Set sendExceptionEmail="true" in the BatchConfig tag above.
+
+    SMTPConnection Notes:
+        * Set enabled="true" when the SMTP connection is fully configured.
+        * Add debug="true" if you need SMTP debug logging when troubleshooting.
+        * The timeout attribute, specified in milliseconds, controls how long to wait for the mail
+          server before giving up.
+        * The password attribute supports passwords encoded using the SAS pwencode {sas001} and {sas002} methods.
+        * For simple anonymous SMTP:
+            <SMTPConnection host="localhost" port="25">
+        * For authenticated SMTP upgraded to SSL via STARTTLS specify useStartTLS="true":
+            <SMTPConnection host="localhost" port="25" useStartTLS="true" user="user" pass="password">
+        * For authenticated pure SMTPS (i.e. not SMTP upgraded to SSL via STARTTLS) specify useSSL="true":
+            <SMTPConnection host="localhost" port="465" useSSL="true" user="user" pass="password">
+    -->
+    <SMTPConnection enabled="${site.env.smtp.enabled}" debug="${site.env.smtp.debug}"
+                    host="${site.env.smtp.host}" port="${site.env.smtp.port}" timeout="${site.env.smtp.timeout}">
+        <DefaultFrom address="${site.env.smtp.from.address}" name="${site.env.smtp.from.name}"/>
+        <DefaultTo address="${site.env.smtp.to.address}" name="${site.env.smtp.to.name}"/>
+        <DefaultSubject>Metacoda Plug-ins Batch Security Testing XML Export: Internal Logins</DefaultSubject>
+    </SMTPConnection>
+    <MetadataConnection host="${site.env.meta.host}" port="${site.env.meta.port}"
+                        user="${site.env.meta.user}" password="${site.env.meta.pass}"/>
+    <SecTestInternalLoginExport file="output/sectest/internal-logins.xml">
+        <!--
+        A Filter tag can be used to subset the export using either a simple text-based filter,
+        or an Advanced Expression-based Filter (specified with a #@ prefix).
+        -->
+        <!--<Filter>Admin</Filter>-->
+        <!--<Filter>#@ userId.startsWith("Admin")</Filter>-->
+    </SecTestInternalLoginExport>
+</BatchConfig>

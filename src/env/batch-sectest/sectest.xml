@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<BatchConfig xmlns="http://metacoda.com/xsd/plugins-batchconfig-6"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://metacoda.com/xsd/plugins-batchconfig-6 http://metacoda.com/xsd/plugins-batchconfig-6.xsd"
+             taskClass="com.metacoda.smc.batch.SecurityTestTask"
+             sendExceptionEmail="${site.env.smtp.enabled}">
+    <!--
+    The SMTPConnection tag can be used to configure email alerts when significant
+    errors occur in the batch process. To use email alerts:
+        1) Configure the mail server settings you want to use in the SMTPConnection section below.
+        2) Set sendExceptionEmail="true" in the BatchConfig tag above.
+
+    SMTPConnection Notes:
+        * Set enabled="true" when the SMTP connection is fully configured.
+        * Add debug="true" if you need SMTP debug logging when troubleshooting.
+        * The timeout attribute, specified in milliseconds, controls how long to wait for the mail
+          server before giving up.
+        * The password attribute supports passwords encoded using the SAS pwencode {sas001} and {sas002} methods.
+        * For simple anonymous SMTP:
+            <SMTPConnection host="localhost" port="25">
+        * For authenticated SMTP upgraded to SSL via STARTTLS specify useStartTLS="true":
+            <SMTPConnection host="localhost" port="25" useStartTLS="true" user="user" pass="password">
+        * For authenticated pure SMTPS (i.e. not SMTP upgraded to SSL via STARTTLS) specify useSSL="true":
+            <SMTPConnection host="localhost" port="465" useSSL="true" user="user" pass="password">
+    -->
+    <SMTPConnection enabled="${site.env.smtp.enabled}" debug="${site.env.smtp.debug}" host="${site.env.smtp.host}"
+                    port="${site.env.smtp.port}" timeout="${site.env.smtp.timeout}">
+        <DefaultFrom address="${site.env.smtp.from.address}" name="${site.env.smtp.from.name}"/>
+        <DefaultTo address="${site.env.smtp.to.address}" name="${site.env.smtp.to.name}"/>
+        <DefaultSubject>Metacoda Plug-ins Batch Security Testing</DefaultSubject>
+    </SMTPConnection>
+
+    <MetadataConnection host="${site.env.meta.host}" port="${site.env.meta.port}"
+                        user="${site.env.meta.user}" password="${site.env.meta.pass}"/>
+
+    <TextResults file="output/sectest-results/results.txt"/>
+    <HTMLResults file="output/sectest-results/results.html"/>
+
+    <MailResults>
+        <SuccessMessage>
+            <Subject>Metadata Security Test Passed</Subject>
+            <Body contentType="text/plain; charset=UTF-8"><![CDATA[
+All metadata security tests have passed.
+
+You can review a summary report at http://www.example.com:7980/sectest-results/results.html
+            ]]></Body>
+        </SuccessMessage>
+        <FailureMessage>
+            <Subject>Metadata Security Test Failed</Subject>
+            <Body contentType="text/html; charset=UTF-8"><![CDATA[
+<p style="color:red">Some metadata security tests have failed.</p>
+<p>You can review a report of the test failures at
+    <a href="http://www.example.com:7980/sectest-results/results.html">
+        http://www.example.com:7980/sectest-results/results.html
+    </a>
+</p>
+            ]]></Body>
+        </FailureMessage>
+    </MailResults>
+
+    <!--
+    SecTestOptions:
+    * maxTestFailures: The maximum number of test failures encountered before testing is aborted.
+                       Defaults to 100 when not specified. Use zero (0) if you do not want a limit.
+    -->
+    <SecTestOptions maxTestFailures="1000"/>
+
+    <SecTest file="acts.xml"/>
+    <SecTest file="users.xml"/>
+    <SecTest file="groups.xml"/>
+    <SecTest file="roles.xml"/>
+    <SecTest file="capabilities.xml"/>
+    <SecTest file="protected-objects.xml"/>
+    <SecTest file="internal-logins.xml"/>
+    <SecTest file="auth-domains.xml"/>
+    <SecTest file="metacoda-recommended-practices.xml"/>
+
+</BatchConfig>

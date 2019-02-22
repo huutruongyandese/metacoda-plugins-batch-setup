@@ -1,0 +1,16 @@
+# Copyright (c) 2019 Metacoda Group Pty Ltd.
+
+# Ignore any IntelliJ project files.
+.idea/
+*.iml
+
+# Ignore the local site-specific configuration directory.
+/site/
+
+# Ignore a scratch-pad notes/files directory.
+/scratch/
+
+# Ignore various temporary files.
+*.swp
+*.log
+*.lst

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<SecTest xmlns="http://metacoda.com/xsd/plugins-sectest-6"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://metacoda.com/xsd/plugins-sectest-6 http://metacoda.com/xsd/plugins-sectest-6.xsd"
+         version="6.1">
+
+    <!--
+    The AllowOnlyGroupsInACTs test can be used to enforce the use of groups in ACTs (failing when users are detected).
+    Any deviations from this rule are documented within the Ignore tag.
+    -->
+    <AllowOnlyGroupsInACTs>
+        <Ignore>
+            <!-- You can ignore an ACT and allow that ACT to contain (any) users. -->
+            <ACT name="Portal ACT"/>
+            <!-- You can ignore a user and allow that user to appear in any ACT. -->
+            <User name="sastrust"/>
+        </Ignore>
+    </AllowOnlyGroupsInACTs>
+
+    <!--
+    The AllowOnlyGroupsInACEs test can be used to enforce the use of groups in ACEs (failing when users are detected).
+    Any deviations from this rule are documented within the Ignore tag.
+    -->
+    <AllowOnlyGroupsInACEs>
+        <Ignore>
+            <!-- You can ignore all ACEs on objects under specific metadata tree paths. -->
+            <TreePath path="/Portal Application Tree/" prefix="true"/>
+            <TreePath path="/System/Applications/" prefix="true"/>
+            <TreePath path="/Products/" prefix="true"/>
+            <TreePath path="/User Folders/" prefix="true"/>
+            <TreePath path="/Users/" prefix="true"/>
+            <!--<TreePath path="Portal ACT" prefix="false"/>-->
+            <!--<TreePath path="Report Repository Content Mapping" prefix="false"/>-->
+            <!-- You can ignore a user and allow that user to appear in any ACE. -->
+            <User name="sastrust"/>
+        </Ignore>
+    </AllowOnlyGroupsInACEs>
+
+    <!--
+    The AllowOnlyImplicitGroupDenials test can be used to ensure permissions are only denied to the PUBLIC group in
+    ACTs and ACEs. Set publicOnly="false" if you want to be less strict and allow denials for SASUSERS too.
+    Any deviations from this rule are documented within the Ignore tag.
+    -->
+    <AllowOnlyImplicitGroupDenials publicOnly="false">
+        <Ignore>
+            <!-- You can ignore all ACEs on objects under specific metadata tree paths. -->
+            <TreePath path="/System/Applications/SAS Web Report Studio" prefix="false"/>
+        </Ignore>
+    </AllowOnlyImplicitGroupDenials>
+
+    <!--
+    The AllowNoACEs test can be used to help enforce the use of ACTs over ACEs (failing when ACEs are detected).
+    Any deviations from this rule are documented within the Ignore tag.
+    -->
+    <AllowNoACEs>
+        <Ignore>
+            <!-- You can ignore all ACEs on objects under specific metadata tree paths. -->
+            <TreePath path="/Portal Application Tree/" prefix="true"/>
+            <TreePath path="/System/Applications/" prefix="true"/>
+            <TreePath path="/System/Services" prefix="false"/>
+            <TreePath path="/Products/" prefix="true"/>
+            <TreePath path="/User Folders/" prefix="true"/>
+            <TreePath path="/Users/" prefix="true"/>
+            <!-- You can ignore a user and allow any ACE that specifies permissions for that user. -->
+            <User name="sastrust"/>
+            <!-- You can ignore a group and allow any ACE that specifies permissions for that group. -->
+            <Group name="PUBLIC"/>
+            <Group name="SASUSERS"/>
+            <Group name="SAS System Services"/>
+        </Ignore>
+    </AllowNoACEs>
+
+    <!--
+    The AllowNoGroupMembershipLoops test can be used to ensure there are no groups with memberships loops.
+    Membership loops can occur where the group has itself as an indirect member through membership of one of
+    its nested group members.
+    -->
+    <AllowNoGroupMembershipLoops/>
+
+    <!--
+    The AllowNoRoleContributionLoopsType test can be used to ensure there are no roles with capability contribution
+    loops. Contribution loops can occur where the role indirectly contributes capabilities back to itself by
+    contributing to other roles which in turn contribute back.
+    -->
+    <AllowNoRoleContributionLoops/>
+
+    <!--
+    The AllowNoGroupsWithImplicitMembers test can be used to ensure there are no groups that have an implicit group
+    (either SASUSERS or PUBLIC) as a member.
+    -->
+    <AllowNoGroupsWithImplicitMembers>
+        <Ignore>
+            <!-- You can ignore a group to allow that group to have implicit members. -->
+            <Group name="BI Dashboard Users"/>
+        </Ignore>
+    </AllowNoGroupsWithImplicitMembers>
+
+    <!--
+    The AllowNoRolesWithImplicitMembers test can be used to ensure there are no roles that have an implicit group
+    (either SASUSERS or PUBLIC) as a member, except for those roles which have been specifically excluded/ignored.
+    Adding implicit groups to roles is commonly done so you may decide to remove this test rather than use a
+    no-implicit-groups-unless-specified-here policy and maintain the list of groups where you expect implicit groups.   
+    -->
+    <AllowNoRolesWithImplicitMembers>
+        <Ignore>
+            <!-- You can ignore a role to allow that role to have implicit members. -->
+            <Role name="Add-In for Microsoft Office: Advanced"/>
+            <Role name="Enterprise Guide: Advanced"/>
+            <Role name="Home: Usage"/>
+            <Role name="Management Console: Content Management"/>
+            <Role name="SAS Studio: Usage"/>
+            <Role name="SAS Studio: Report Consumer"/>
+            <Role name="Visual Analytics: Basic"/>
+            <Role name="Web Report Studio: Report Viewing"/>
+            <Role name="Web Report Studio: Report Creation"/>
+        </Ignore>
+    </AllowNoRolesWithImplicitMembers>
+
+    <!--
+    The AllowNoUnprotectedACTs test can be used to ensure that all ACTs have basic protections, in that the PUBLIC
+    group has effective permissions of -RM,-WM on all ACTs and the SASUSERS group has effective permissions
+    of ?RM,-WM on all ACTs.
+    -->
+    <AllowNoUnprotectedACTs/>
+
+    <!--
+    The RequireFoundationRepositoryACT test can be used to ensure that the Foundation repository has a repository
+    ACT (usually named Default ACT).  Having a Foundation Repository ACT is a recommended practice because
+    without one permissions are granted by default.
+    -->
+    <RequireFoundationRepositoryACT/>
+
+    <!--
+    The AllowNoDirectFoundationRepositoryACTUsage test can be used to ensure that the Foundation Repository ACT,
+    usually named Default ACT, has not been directly applied to any metadata objects.
+    The Foundation Repository ACT implicitly and indirectly applies to all objects through object inheritance.
+    When the Foundation Repository ACT has been direct applied to an object it is usually a mistake.
+    -->
+    <AllowNoDirectFoundationRepositoryACTUsage/>
+
+</SecTest>

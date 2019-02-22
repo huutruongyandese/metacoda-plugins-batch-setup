@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<SecTest xmlns="http://metacoda.com/xsd/plugins-sectest-6"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://metacoda.com/xsd/plugins-sectest-6 http://metacoda.com/xsd/plugins-sectest-6.xsd">
+
+    <Objects>
+        <Object required="true" publicType="ACT" name="Default ACT">
+            <AccessControls complete="true">
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Group required="true" name="PUBLIC" permissions="-WM"/>
+            </AccessControls>
+        </Object>
+        <Object required="true" publicType="ACT" name="Private User Folder ACT">
+            <AccessControls complete="true">
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Group required="true" name="PUBLIC" permissions="-WM"/>
+            </AccessControls>
+        </Object>
+        <Object required="true" publicType="ACT" name="SAS Administrator Settings">
+            <AccessControls complete="true">
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Group required="true" name="PUBLIC" permissions="-WM"/>
+            </AccessControls>
+        </Object>
+        <Object required="true" publicType="Role" name="META: Operators Role">
+            <AccessControls complete="true">
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Group required="true" name="PUBLIC" permissions="-WM,-CM"/>
+            </AccessControls>
+        </Object>
+        <Object required="true" publicType="Role" name="META: User and Group Administrators Role">
+            <AccessControls complete="true">
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Group required="true" name="PUBLIC" permissions="-WM,-CM"/>
+            </AccessControls>
+        </Object>
+        <Object required="true" publicType="Role" name="META: Unrestricted Users Role">
+            <AccessControls complete="true">
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Group required="true" name="PUBLIC" permissions="-WM,-CM"/>
+            </AccessControls>
+        </Object>
+        <Object required="true" publicType="UserGroup" name="SASAdministrators">
+            <AccessControls complete="true">
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Group required="true" name="PUBLIC" permissions="-WM,-CM"/>
+            </AccessControls>
+        </Object>
+        <Object required="true" publicType="UserGroup" name="SAS System Services">
+            <AccessControls complete="true">
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Group required="true" name="PUBLIC" permissions="-WM,-CM"/>
+            </AccessControls>
+        </Object>
+        <Object required="true" publicType="UserGroup" name="SASUSERS">
+            <AccessControls complete="true">
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Group required="true" name="PUBLIC" permissions="-WM,-CM"/>
+            </AccessControls>
+        </Object>
+        <Object required="true" publicType="UserGroup" name="PUBLIC">
+            <AccessControls complete="true">
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Group required="true" name="PUBLIC" permissions="-WM,-CM"/>
+            </AccessControls>
+        </Object>
+    </Objects>
+
+</SecTest>

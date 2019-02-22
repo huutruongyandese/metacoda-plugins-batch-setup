@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<SecTest xmlns="http://metacoda.com/xsd/plugins-sectest-6"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://metacoda.com/xsd/plugins-sectest-6 http://metacoda.com/xsd/plugins-sectest-6.xsd">
+
+    <Users complete="false">
+        <User required="true" name="sasadm" displayName="SAS Administrator" internal="true">
+            <DirectLogins complete="true">
+                <Login required="false" authDomain="WebInfrastructurePlatformDataServer9.4Admin" userId="dbmsowner" hasPassword="true" />
+                <Login required="false" authDomain="JobMonitorDataServerAdmin" userId="jmdbadmin" hasPassword="true" />
+                <Login required="false" authDomain="DataRemediationDataServerAdmin" userId="rmdbadmin" hasPassword="true" />
+            </DirectLogins>
+            <DirectGroupMemberships complete="true">
+                <Group required="true" name="SASAdministrators"/>
+                <Group required="false" name="SAS_EV_Super_User"/>
+            </DirectGroupMemberships>
+            <DirectRoleMemberships complete="true">
+                <Role required="true" name="META: Unrestricted Users Role"/>
+            </DirectRoleMemberships>
+            <AccessControls complete="true">
+            </AccessControls>
+        </User>
+        <User required="true" name="sastrust" displayName="SAS Trusted User" internal="true" login="false">
+            <DirectLogins complete="true">
+            </DirectLogins>
+            <DirectGroupMemberships complete="true">
+                <Group required="false" name="BI Dashboard Administrators"/>
+                <Group required="false" name="Portal Administrators"/>
+                <Group required="true" name="SAS General Servers"/>
+                <Group required="true" name="SAS System Services"/>
+            </DirectGroupMemberships>
+            <DirectRoleMemberships complete="true">
+            </DirectRoleMemberships>
+            <AccessControls complete="true">
+            </AccessControls>
+        </User>
+    </Users>
+
+</SecTest>

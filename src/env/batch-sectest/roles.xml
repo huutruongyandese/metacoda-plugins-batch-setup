@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<SecTest xmlns="http://metacoda.com/xsd/plugins-sectest-6"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://metacoda.com/xsd/plugins-sectest-6 http://metacoda.com/xsd/plugins-sectest-6.xsd">
+
+    <Roles complete="false">
+        <Role required="true" repository="Foundation" name="Management Console: Advanced"
+              displayName="Management Console: Advanced">
+            <DirectMembers complete="true">
+                <Group required="true" name="SASAdministrators"/>
+            </DirectMembers>
+            <DirectRoleContributions complete="true"/>
+            <DirectContributingRoles complete="true"/>
+            <Capabilities complete="false">
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Authorization Manager"
+                            granted="true"/>
+                <Capability required="false" parentFolder="Management Console 9.4:/Plug-ins" name="BI Lineage"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Data Library Manager"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins"
+                            name="Foundation Services Manager" granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Metadata Manager"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Publishing Framework"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Schedule Manager"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="User Manager"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Server Manager"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Application Monitor"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Folder View"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/General"
+                            name="Access Unregistered Plug-ins" granted="true"/>
+            </Capabilities>
+            <AccessControls complete="true"/>
+        </Role>
+        <Role required="true" repository="Foundation" name="Management Console: Content Management"
+              displayName="Management Console: Content Management">
+            <DirectMembers complete="true">
+                <Group required="true" name="SASUSERS"/>
+            </DirectMembers>
+            <DirectRoleContributions complete="true"/>
+            <DirectContributingRoles complete="true"/>
+            <Capabilities complete="false">
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Authorization Manager"
+                            granted="true"/>
+                <Capability required="false" parentFolder="Management Console 9.4:/Plug-ins" name="BI Lineage"
+                            granted="false"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Data Library Manager"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins"
+                            name="Foundation Services Manager" granted="false"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Metadata Manager"
+                            granted="false"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Publishing Framework"
+                            granted="false"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Schedule Manager"
+                            granted="false"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="User Manager"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Server Manager"
+                            granted="false"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Application Monitor"
+                            granted="false"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Folder View"
+                            granted="true"/>
+                <Capability required="true" parentFolder="Management Console 9.4:/General"
+                            name="Access Unregistered Plug-ins" granted="false"/>
+            </Capabilities>
+            <AccessControls complete="true"/>
+        </Role>
+    </Roles>
+
+</SecTest>

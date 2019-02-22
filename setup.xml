@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<project name="MetacodaPluginsBatchSetup" default="help">
+
+    <target name="help" description="Display simple help text.">
+        <echo level="info">
+            *** HELP ***
+            ============
+            You can use the Metacoda Plug-ins Batch Setup utility to take the sample batch scripts
+            and XML configuration files for the Metacoda Batch Interface and customize them for
+            your site and the SAS environment you want to use them with. This includes making
+            changes to put your SAS metadata server host name, port number, etc in all of the
+            required locations.
+
+            To create the custom batch configuration directory tree under site/env-default use
+            the command:
+
+            ./setup.sh create-env
+
+            ... on UNIX or Linux platforms. For Windows platforms run:
+
+            setup.bat create-env
+
+            If you want to specify an environment name then you can adjust the command like so:
+
+            ./setup.sh create-env -Dsite.env=lev1
+
+            ... which will create a directory of batch scripts and configuration files under
+            the site/env-lev1 directory.
+
+            The first time you use create-env it will create the following files from templates:
+
+            * site/global.properties
+            * site/env-lev1.properties
+
+            ... and then abort for you to make some required changes. You can edit one or both
+            of the properties files to supply details for your site and SAS environment
+            (see the contents of those generated files for more info on the details required).
+
+            Any settings added to global.properties can be used across multiple environments.
+            Any settings added to env-lev1.properties will only be used for that environment.
+            If you are only using the utility for a single environment then you can put everything
+            in either of the files. If you plan to setup configurations for multiple SAS
+            environments then put common settings in global, and environment specific settings in
+            the env file.
+
+            It will also create a site/downloads directory, download a required SAS VJRExtract
+            utility from support.sas.com, and unpack it into the site/VJRExtract directory.
+            This utility is used to extract the pre-requisite SAS JAR files needed to run Metacoda
+            Plug-ins Batch Interface with your SAS platform installation.
+
+            You will also need to log into support.metacoda.com and download metacoda.plugins.jar
+            to place in the site/downloads directory too. At the same time save a copy of the
+            metacoda-plugins-v6.lic license file there (as provided to you by Metacoda).
+
+            You need to run this Metacoda Plug-ins Batch Setup utility on a machine where SAS
+            Management Console has been installed, ideally one with access to the internet.
+            Alternatively you can download the required files yourself and drop them into the
+            site/downloads directory manually.
+
+            The generated site/env-name directory can either be used where it is, or moved onto
+            a different target server where you want to run it. Once generated, the env
+            directory is completely stand-alone.
+
+            UPDATES
+            -------
+            To update this utility you can run "git pull" to pull down any recent changes and
+            then re-run ./setup.sh create-env. It will overwrite any generated files and so,
+            if you want to keep any customizations you have made to those generated files,
+            rename the files so they will not get overwritten (e.g. by prefixing with your
+            site name).
+
+            UNINSTALL
+            ---------
+            If you want to delete any generated files and return to a clean state then run:
+
+            ./setup.sh clean-site
+
+            ... but BEWARE this deletes the entire contents of the site directory, so you may
+            want to first backup any files you need in future.
+            Alternatively if you no longer need this utility then you can just delete
+            this main directory (it installs no software elsewhere to be removed).
+        </echo>
+    </target>
+
+    <!--
+    The default site environment name used unless otherwise specified on the
+    command line.
+     -->
+    <property name="site.env" value="default"/>
+
+    <!--
+    Support operating system environment variables use in site global and
+    environment properties files. e.g. ${opsys.env.PATH}
+    -->
+    <property environment="os.env"/>
+
+    <!--
+    A few constant setup properties that should not normally need to be
+    modified by the site.
+    -->
+    <property file="setup.properties"/>
+
+    <!--
+    Set os.isWindows boolean property based on this platform as the default
+    to use for site.global.os.isWindows and site.env.os.isWindows unless
+    otherwise specified.
+    -->
+    <condition property="os.isWindows" value="true" else="false">
+        <os family="windows"/>
+    </condition>
+
+    <!--
+    The site directory will contain any downloaded and site specific generated
+    files.
+    -->
+    <mkdir dir="site"/>
+    <mkdir dir="site/downloads"/>
+
+    <!-- Set a few properties based on the existence of transient files -->
+    <condition property="metacoda.license.downloaded" value="true" else="false">
+        <available file="site/downloads/${metacoda.plugins.lic}"/>
+    </condition>
+    <condition property="metacoda.plugins.downloaded" value="true" else="false">
+        <available file="site/downloads/${metacoda.plugins.jar}"/>
+    </condition>
+    <condition property="sas.vjrx.downloaded" value="true" else="false">
+        <available file="site/downloads/${sas.vjrx.zip}"/>
+    </condition>
+    <condition property="sas.vjrx.unpacked" value="true" else="false">
+        <available file="site/VJRExtract/VJRExtract.jar"/>
+    </condition>
+    <condition property="site.global.properties.exists" value="true" else="false">
+        <available file="site/global.properties"/>
+    </condition>
+    <property name="site.env.properties" value="env-${site.env}.properties"/>
+    <condition property="site.env.properties.exists" value="true" else="false">
+        <available file="site/${site.env.properties}"/>
+    </condition>
+    <property name="site.env.dir" value="env-${site.env}"/>
+
+    <!-- Log some system info that will be useful in troubleshooting. -->
+    <echo level="info">
+        ***********************************************************
+        Metacoda Plug-ins Batch Setup
+        ***********************************************************
+        OpSys:
+        .. os.name=${os.name}
+        .. os.arch=${os.arch}
+        .. os.version=${os.version}
+        .. os.isWindows=${os.isWindows}
+        ***********************************************************
+        Java:
+        .. java.home=${java.home}
+        .. java.version=${java.version}
+        .. java.specification.version=${java.specification.version}
+        .. java.vm.version=${java.vm.version}
+        ***********************************************************
+        Ant:
+        .. ant.home=${ant.home}
+        .. ant.version=${ant.version}
+        .. ant.java.version=${ant.java.version}
+        .. ant.file=${ant.file}
+        .. ant.project.name=${ant.project.name}
+        .. basedir=${basedir}
+        ***********************************************************
+        User:
+        .. user.name=${user.name}
+        .. user.home=${user.home}
+        .. user.dir=${user.dir}
+        ***********************************************************
+        General:
+        .. metacoda.license.downloaded=${metacoda.license.downloaded}
+        .. metacoda.plugins.downloaded=${metacoda.plugins.downloaded}
+        .. sas.vjrx.downloaded=${sas.vjrx.downloaded}
+        .. sas.vjrx.unpacked=${sas.vjrx.unpacked}
+        .. site.global.properties.exists=${site.global.properties.exists}
+        .. site.env.properties=${site.env.properties}
+        .. site.env.properties.exists=${site.env.properties.exists}
+        .. site.env.dir=${site.env.dir}
+        ***********************************************************
+    </echo>
+
+    <target name="clean-site" description="Clean up by removing all site specific files.">
+        <delete dir="site"/>
+    </target>
+
+    <!-- Check for Metacoda Plug-ins license download and abort if missing. -->
+    <target name="-check-metacoda-plugins-lic" unless="${metacoda.license.downloaded}">
+        <echo level="error">
+            *** ERROR ***
+            The Metacoda Plug-ins license (${metacoda.plugins.lic}) has not yet been
+            downloaded/saved into the site/downloads directory.
+            If you do not have a copy of this license file then please contact Metacoda
+            Support by email at support@metacoda.com for assistance.
+        </echo>
+        <property name="abort" value="true"/>
+    </target>
+
+    <!-- Check for Metacoda Plug-ins JAR download and abort if missing. -->
+    <target name="-check-metacoda-plugins-jar" unless="${metacoda.plugins.downloaded}">
+        <echo level="error">
+            *** ERROR ***
+            The Metacoda Plug-ins JAR (${metacoda.plugins.jar}) has not yet been
+            downloaded. Please visit https://support.metacoda.com/ to login and
+            download this file and place it into the site/downloads directory.
+        </echo>
+        <property name="abort" value="true"/>
+    </target>
+
+    <!--
+    Check for a site specific global properties file and, if missing, create
+    a new one from the template, and abort to give them a chance to edit it
+    first.
+    -->
+    <target name="-create-site-global-properties" unless="${site.global.properties.exists}">
+        <copy file="src/site-global.properties" tofile="site/global.properties"/>
+        <echo level="warning">
+            *** WARNING ***
+            No site/global.properties file was found so a new one has been
+            created for you. Please review it's contents, edit as appropriate
+            for your site, then try again.
+        </echo>
+        <property name="abort" value="true"/>
+    </target>
+
+    <target name="-load-site-global-properties" if="${site.global.properties.exists}">
+        <property file="site/global.properties"/>
+    </target>
+
+    <target name="-site-global-properties"
+            depends="-check-metacoda-plugins-lic, -check-metacoda-plugins-jar, -create-site-global-properties, -load-site-global-properties"
+    />
+
+    <!-- Log some site specific info that will be useful in troubleshooting. -->
+    <target name="-site-info" depends="-site-global-properties">
+        <echo level="info">
+            ***********************************************************
+            Site (Global):
+            .. site.global.os.isWindows=${site.global.os.isWindows}
+            .. site.global.sashome=${site.global.sashome}
+            .. site.global.jrehome=${site.global.jrehome}
+            .. site.global.vjrhome=${site.global.vjrhome}
+            .. site.global.mchome=${site.global.mchome}
+            ***********************************************************
+        </echo>
+    </target>
+
+    <!-- Downloads the SAS VJRExtract tool from the support.sas.com site. -->
+    <target name="-download-vjrx" depends="-site-global-properties" unless="${sas.vjrx.downloaded}">
+        <echo level="info">NOTE: Downloading the SAS VJRExtract utility to extract the required SAS jars.</echo>
+        <get src="${sas.vrjx.url}" dest="site/downloads/${sas.vjrx.zip}"
+             verbose="true" usetimestamp="true"
+        />
+    </target>
+
+    <!-- Unpacks the SAS VJRExtract tool previously downloaded. -->
+    <target name="-unpack-vjrx" depends="-download-vjrx" unless="${sas.vjrx.unpacked}">
+        <echo level="info">NOTE: Unpacking the SAS VJRExtract utility.</echo>
+        <unzip src="site/downloads/${sas.vjrx.zip}" dest="site" failOnEmptyArchive="true"/>
+    </target>
+
+    <!--
+    An internal target to depend on to know that the basic site dir has been
+    setup, the Metacoda Plug-ins JAR has been downloaded and installed, and the
+    SAS VJRExtract utility has been downloaded and unpacked.
+    -->
+    <target name="-site-init" depends="-site-info, -download-vjrx, -unpack-vjrx"/>
+
+    <target name="-create-site-env-properties" unless="${site.env.properties.exists}">
+        <copy file="src/site-env.properties" tofile="site/${site.env.properties}"/>
+        <echo level="warning">
+            *** WARNING ***
+            No site/${site.env.properties} file was found so a new one has
+            been created for you. Please review it's contents, edit as
+            appropriate for your site environment, and then try again.
+        </echo>
+        <property name="abort" value="true"/>
+    </target>
+
+    <target name="-load-site-env-properties" if="${site.env.properties.exists}">
+        <!--suppress AntResolveInspection -->
+        <property file="site/${site.env.properties}"/>
+    </target>
+
+    <target name="-site-env-properties" depends="-create-site-env-properties, -load-site-env-properties">
+        <condition property="site.env.sashome.found" value="true" else="false">
+            <available file="${site.env.sashome}/sassw.config"/>
+        </condition>
+        <condition property="site.env.jrehome.found" value="true" else="false">
+            <or>
+                <available file="${site.env.jrehome}/bin/java"/>
+                <available file="${site.env.jrehome}/bin/java.exe"/>
+            </or>
+        </condition>
+        <condition property="site.env.vjrhome.found" value="true" else="false">
+            <available file="${site.env.vjrhome}/eclipse/com.sas.app.launcher.cacheFile"/>
+        </condition>
+        <condition property="site.env.mchome.found" value="true" else="false">
+            <available file="${site.env.mchome}/picklist"/>
+        </condition>
+        <condition property="site.env.vjrx.done" value="true" else="false">
+            <available file="site/${site.env.dir}/lib/sas.oma.joma.jar"/>
+        </condition>
+    </target>
+
+    <!-- Log some site environment specific info that will be useful in troubleshooting. -->
+    <target name="-env-info" depends="-site-env-properties">
+        <echo level="info">
+            ***********************************************************
+            Site (Environment):
+            .. site.env.os.isWindows=${site.env.os.isWindows}
+            .. site.env.sashome=${site.env.sashome}
+            .. site.env.sashome.found=${site.env.sashome.found}
+            .. site.env.jrehome=${site.env.jrehome}
+            .. site.env.jrehome.found=${site.env.jrehome.found}
+            .. site.env.vjrhome=${site.env.vjrhome}
+            .. site.env.vjrhome.found=${site.env.vjrhome.found}
+            .. site.env.mchome=${site.env.mchome}
+            .. site.env.mchome.found=${site.env.mchome.found}
+            .. site.env.vjrx.done=${site.env.vjrx.done}
+            ***********************************************************
+        </echo>
+    </target>
+
+    <!-- Check SAS home was found and error/abort if not. -->
+    <target name="-env-check-sashome" depends="-site-env-properties" unless="${site.env.sashome.found}">
+        <echo level="error">
+            *** ERROR ***
+            Could not locate the SAS Home directory.
+            No sassw.config file was found in the specified site.env.sashome (${site.env.sashome}).
+            Please update the site global/environment properties file and try again.
+        </echo>
+        <property name="abort" value="true"/>
+    </target>
+
+    <!-- Check SAS JRE was found and error/abort if not. -->
+    <target name="-env-check-jrehome" depends="-site-env-properties" unless="${site.env.jrehome.found}">
+        <echo level="error">
+            *** ERROR ***
+            Could not locate the SAS Java Runtime Environment (JRE) directory.
+            No Java executable was found in the specified site.env.jrehome (${site.env.jrehome}).
+            Please update the site global/environment properties file and try again.
+        </echo>
+        <property name="abort" value="true"/>
+    </target>
+
+    <!-- Check SAS Versioned Jar Repository (VJR) was found and error/abort if not. -->
+    <target name="-env-check-vjrhome" depends="-site-env-properties" unless="${site.env.vjrhome.found}">
+        <echo level="error">
+            *** ERROR ***
+            Could not locate the SAS Versioned Jar Repository (VJR) directory.
+            No SAS VJR cache file was found in the specified site.env.vjrhome (${site.env.vjrhome}).
+            Please update the site global/environment properties file and try again.
+        </echo>
+        <property name="abort" value="true"/>
+    </target>
+
+    <!-- Check SAS Management Console (MC) was found and error/abort if not. -->
+    <target name="-env-check-mchome" depends="-site-env-properties" unless="${site.env.mchome.found}">
+        <echo level="error">
+            *** ERROR ***
+            Could not locate the SAS Management Console (MC) directory.
+            No SAS MC picklist file was found in the specified site.env.mchome (${site.env.mchome}).
+            Please update the site global/environment properties file and try again.
+        </echo>
+        <property name="abort" value="true"/>
+    </target>
+
+    <!-- Check a few environment pre-requisites and warn/abort as required. -->
+    <target name="-env-check" depends="-env-check-sashome, -env-check-jrehome, -env-check-vjrhome, -env-check-mchome">
+        <fail if="${abort}">Processing aborted:
+            *** ERROR ***
+            Processing has been aborted due to errors/warnings details above.
+            Please review, correct as appropriate, and try again.
+        </fail>
+    </target>
+
+    <!--
+    Copy source example scripts into site environment dir with property
+    expansion.
+    -->
+    <target name="-env-files" depends="-site-env-properties">
+        <echo level="info">NOTE: Copying templates/samples and inserting environment specific properties.</echo>
+        <copy todir="site/${site.env.dir}" overwrite="true">
+            <fileset dir="src/env">
+                <include name="**/*.xml"/>
+                <include name="**/*.txt"/>
+            </fileset>
+            <fileset dir="src/env">
+                <include name="**/*.sh" unless="${site.env.os.isWindows}"/>
+            </fileset>
+            <fileset dir="src/env">
+                <include name="**/*.bat" if="${site.env.os.isWindows}"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+        <chmod perm="755">
+            <fileset dir="site/${site.env.dir}">
+                <include name="**/*.sh"/>
+            </fileset>
+        </chmod>
+        <copy file="site/downloads/${metacoda.plugins.jar}" todir="site/${site.env.dir}/lib"/>
+        <copy file="site/downloads/${metacoda.plugins.lic}" todir="site/${site.env.dir}/"/>
+    </target>
+
+    <!--
+    Run the SAS VJRExtract utility using the site environment specific config
+    to populate the site environment lib dir with the required SAS JAR files.
+    -->
+    <target name="-env-vjrx" depends="-site-env-properties" unless="${site.env.vjrx.done}">
+        <echo level="info">NOTE: Running SAS VJRExtract utility to populate environment lib with SAS jars.</echo>
+        <java jvm="${site.env.jrehome}/bin/java"
+              fork="true" failonerror="true"
+              jar="site/VJRExtract/VJRExtract.jar">
+            <arg path="${site.env.vjrhome}"/>
+            <arg path="${site.env.mchome}/picklist"/>
+            <arg path="site/${site.env.dir}/lib"/>
+        </java>
+    </target>
+
+    <!--
+    An internal target to depend on to know that the basic site env dir has been
+    setup, and the SAS VJRExtract utility has been used to populate the env libs
+    dir.
+    -->
+    <target name="-env-init" depends="-site-init, -env-info, -env-check, -env-files, -env-vjrx">
+    </target>
+
+    <!--
+    Creates a new environment specific batch configuration named using the site.env property (default if required),
+    under site/env-${site.env} (e.g. site/env-default, site/env-lev1, site/env-lev2 etc.   
+    -->
+    <target name="create-env" depends="-env-init" description="Create a new environment specific batch configuration.">
+    </target>
+
+</project>

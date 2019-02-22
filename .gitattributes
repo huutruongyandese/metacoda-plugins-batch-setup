@@ -1,0 +1,4 @@
+# Copyright (c) 2019 Metacoda Group Pty Ltd.
+
+*.bat text eol=crlf
+*.sh text eol=lf

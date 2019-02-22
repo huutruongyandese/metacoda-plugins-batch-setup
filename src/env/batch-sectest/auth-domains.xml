@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2007-2019 Metacoda Group Pty Ltd. -->
+<SecTest xmlns="http://metacoda.com/xsd/plugins-sectest-6"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://metacoda.com/xsd/plugins-sectest-6 http://metacoda.com/xsd/plugins-sectest-6.xsd"
+         version="6.1">
+
+    <AuthDomains complete="false">
+        <AuthDomain required="true" name="DefaultAuth" desc="" outboundOnly="false" trustedOnly="false">
+            <Logins complete="false">
+                <Login required="true" userId="sassrv"/>
+            </Logins>
+            <Connections complete="false">
+                <Connection required="true" name="Connection: SASMeta - Metadata Server"/>
+                <Connection required="true" name="Connection: SASApp - Pooled Workspace Server"/>
+                <Connection required="true" name="Connection: SASApp - Stored Process Server"/>
+                <Connection required="true" name="Connection: SASApp - Workspace Server"/>
+                <Connection required="true" name="Connection: SAS Content Server"/>
+            </Connections>
+            <Libraries complete="true">
+            </Libraries>
+            <AccessControls complete="true">
+            </AccessControls>
+        </AuthDomain>
+    </AuthDomains>
+
+</SecTest>

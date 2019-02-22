@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<SecTest xmlns="http://metacoda.com/xsd/plugins-sectest-6"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://metacoda.com/xsd/plugins-sectest-6 http://metacoda.com/xsd/plugins-sectest-6.xsd">
+
+
+    <ACTs complete="false">
+        <ACT required="true" repository="Foundation" name="SAS Administrator Settings">
+            <PermissionPattern complete="true">
+                <Group required="true" name="SAS System Services" permissions="+RM"/>
+                <Group required="true" name="SASAdministrators" permissions="+RM,+WM,+CM,+A"/>
+            </PermissionPattern>
+            <Objects complete="false">
+                <ACT required="true" name="Default ACT"/>
+                <ACT required="true" name="Private User Folder ACT"/>
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Object publicType="RootFolder" name="BIP Service"/>
+                <Group required="true" name="SASAdministrators"/>
+                <Group required="true" name="SAS System Services"/>
+                <Group required="true" name="SASUSERS"/>
+                <Group required="true" name="PUBLIC"/>
+                <Role required="true" name="META: Operators Role"/>
+                <Role required="true" name="META: User and Group Administrators Role"/>
+                <Role required="true" name="META: Unrestricted Users Role"/>
+            </Objects>
+            <AccessControls complete="true">
+                <ACT required="true" name="SAS Administrator Settings"/>
+                <Group required="true" name="PUBLIC" permissions="-WM"/>
+            </AccessControls>
+        </ACT>
+    </ACTs>
+
+</SecTest>

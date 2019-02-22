@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<SecTest xmlns="http://metacoda.com/xsd/plugins-sectest-6"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://metacoda.com/xsd/plugins-sectest-6 http://metacoda.com/xsd/plugins-sectest-6.xsd">
+
+    <Capabilities complete="false">
+        <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Authorization Manager">
+            <DirectMembers complete="true">
+                <Role required="true" name="Management Console: Advanced"/>
+                <Role required="true" name="Management Console: Content Management"/>
+                <Role required="true" name="META: Unrestricted Users Role"/>
+            </DirectMembers>
+        </Capability>
+        <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Data Library Manager">
+            <DirectMembers complete="true">
+                <Role required="true" name="Management Console: Advanced"/>
+                <Role required="true" name="Management Console: Content Management"/>
+                <Role required="true" name="META: Unrestricted Users Role"/>
+            </DirectMembers>
+        </Capability>
+        <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="User Manager">
+            <DirectMembers complete="true">
+                <Role required="true" name="Management Console: Advanced"/>
+                <Role required="true" name="Management Console: Content Management"/>
+                <Role required="true" name="META: Unrestricted Users Role"/>
+            </DirectMembers>
+        </Capability>
+        <Capability required="true" parentFolder="Management Console 9.4:/Plug-ins" name="Server Manager">
+            <DirectMembers complete="true">
+                <Role required="true" name="Management Console: Advanced"/>
+                <Role required="true" name="META: Unrestricted Users Role"/>
+            </DirectMembers>
+        </Capability>
+    </Capabilities>
+
+</SecTest>

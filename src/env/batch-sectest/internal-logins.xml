@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<SecTest xmlns="http://metacoda.com/xsd/plugins-sectest-6"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://metacoda.com/xsd/plugins-sectest-6 http://metacoda.com/xsd/plugins-sectest-6.xsd">
+
+    <InternalLogins complete="false">
+        <InternalLogin required="true" userId="sasadm@saspw"/>
+        <InternalLogin required="true" userId="sastrust@saspw"/>
+    </InternalLogins>
+
+</SecTest>
