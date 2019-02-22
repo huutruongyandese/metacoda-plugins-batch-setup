@@ -386,6 +386,7 @@
             <fileset dir="src/env">
                 <include name="**/*.xml"/>
                 <include name="**/*.txt"/>
+                <include name="**/*.idsp"/>
             </fileset>
             <fileset dir="src/env">
                 <include name="**/*.sh" unless="${site.env.os.isWindows}"/>

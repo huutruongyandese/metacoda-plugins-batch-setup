@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<BatchConfig xmlns="http://metacoda.com/xsd/plugins-batchconfig-6"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://metacoda.com/xsd/plugins-batchconfig-6 http://metacoda.com/xsd/plugins-batchconfig-6.xsd"
+             taskClass="com.metacoda.smc.batch.IdSyncImportTask"
+             sendExceptionEmail="${site.env.smtp.enabled}">
+    <!--
+    The SMTPConnection tag can be used to configure email alerts when significant
+    errors occur in the batch process. To use email alerts:
+        1) Configure the mail server settings you want to use in the SMTPConnection section below.
+        2) Set sendExceptionEmail="true" in the BatchConfig tag above.
+
+    SMTPConnection Notes:
+        * Set enabled="true" when the SMTP connection is fully configured.
+        * Add debug="true" if you need SMTP debug logging when troubleshooting.
+        * The timeout attribute, specified in milliseconds, controls how long to wait for the mail
+          server before giving up.
+        * The password attribute supports passwords encoded using the SAS pwencode {sas001} and {sas002} methods.
+        * For simple anonymous SMTP:
+            <SMTPConnection host="localhost" port="25">
+        * For authenticated SMTP upgraded to SSL via STARTTLS specify useStartTLS="true":
+            <SMTPConnection host="localhost" port="25" useStartTLS="true" user="user" pass="password">
+        * For authenticated pure SMTPS (i.e. not SMTP upgraded to SSL via STARTTLS) specify useSSL="true":
+            <SMTPConnection host="localhost" port="465" useSSL="true" user="user" pass="password">
+    -->
+    <SMTPConnection enabled="${site.env.smtp.enabled}" debug="${site.env.smtp.debug}"
+                    host="${site.env.smtp.host}" port="${site.env.smtp.port}" timeout="${site.env.smtp.timeout}">
+        <DefaultFrom address="${site.env.smtp.from.address}" name="${site.env.smtp.from.name}"/>
+        <DefaultTo address="${site.env.smtp.to.address}" name="${site.env.smtp.to.name}"/>
+        <DefaultSubject>Metacoda Plug-ins Batch Identity Sync (AD)</DefaultSubject>
+    </SMTPConnection>
+
+    <!--
+    The MetadataConnection tag is used to specify how to connect to the SAS Metadata Server to be used for
+    this Metacoda Identity Sync operation. If you use an internal account here (user@saspw) then you will
+    also need to provide valid operating system credentials for a WorkspaceConnection (as seen in a commented
+    examples below). It is often simpler to just use those same alternative credentials on this MetadataConnection
+    tag instead (assuming that the associated SAS identity in metadata has enough metadata permissions to be
+    able to perform the required Metacoda Identity Sync operation.
+    -->
+    <MetadataConnection host="${site.env.meta.host}" port="${site.env.meta.port}"
+                        user="${site.env.idsync.user}" password="${site.env.idsync.pass}"/>
+
+    <!--
+    The WorkspaceConnection tag can be used when you need more control on how Metacoda Identity Sync uses a
+    SAS Workspace Server.
+  
+    If you need to specify a particular SAS Workspace Server, rather than the default behaviour of using the
+    first one found in metadata, you can specify it by name like so:
+  
+        <WorkspaceConnection server="SASApp - Logical Workspace Server"/>
+  
+    Additionally, if you use an internal account (user@saspw) on the MetadataConnection above, and do not have
+    a workspace server configured for SAS Token Authentication, then you will need to either use a non-internal
+    account (i.e. not @saspw) on the MetadataConnection above, or specify alternative valid operating system
+    credentials specifically for the workspace server like so:
+  
+        <WorkspaceConnection server="SASApp - Logical Workspace Server"
+            user="sasdemo" password="{sas002}ThePwEncodedPassword"/>
+    -->
+
+    <WorkspaceConnection server="${site.env.idsync.logicalWorkspaceServer}" />
+
+    <!--
+    The IdSyncImport tag points to an Identity Sync Profile (IDSP) file (relative to this batch config XML file).
+    That IDSP file contains configuration information that controls the identity import operation.
+    An IDSP file can be created by using SAS Management Console and the Metacoda Identity Sync plug-in.
+    In this case the IDSP file points to an IDSX file which contains information about how to connect
+    to Active Directory and extract identity information for importing into SAS metadata.
+    -->
+    <IdSyncImport file="idsync-ad.idsp"/>
+
+</BatchConfig>

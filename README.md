@@ -175,7 +175,7 @@ running this setup script on the target server machine itself.
 ## Running Metacoda Plug-ins Batch Interface Scripts
 
 Once you have your site/env-default generated you can run all of the following sample scripts
-(none of which make any changes to SAS metadata):
+(none of which make any changes to SAS metadata as supplied):
 
 ```bash
 cd /opt/sas94m6/metacoda-plugins-batch-setup/site/env-default
@@ -183,6 +183,7 @@ cd /opt/sas94m6/metacoda-plugins-batch-setup/site/env-default
 ./run-batch-export-csv.sh 
 ./run-batch-export-sectest.sh
 ./run-batch-sectest.sh
+./run-batch-idsync-ad.sh
 ```
 
 ... or if you built for a Windows environment:
@@ -192,6 +193,7 @@ run-batch-export-html.bat
 run-batch-export-csv.bat 
 run-batch-export-sectest.bat
 run-batch-sectest.bat
+run-batch-idsync-ad.bat
 ```
 
 The run-batch-export-html.sh/bat script generates a series of SAS Metadata Security HTML reports
@@ -214,6 +216,81 @@ and may need to configure additional test exclusions. However, these sample test
 used as the basis for further customization to meet your own implementation and recommended
 practice metadata security test regime.
  
+The run-batch-idsync-ad.sh/bat script provides a starting point for running Metacoda
+Identity Sync in batch using an Identity Sync Profile (.IDSP file) you have previously
+created and configured using the Metacoda Identity Sync plug-in inside SAS Management Console.
+As there are many site-specific configuration options for Identity Sync, this setup
+script does not attempt to support them - that is the job of the Identity Sync Profile Wizard
+in the interactive Identity Sync plug-in.
+This setup script just provides a skeleton framework for you to drop in your own IDSP,
+once you have one that is already working inside SAS Management Console and you now want
+to schedule.
+
+## Batch Identity Sync
+
+There are 3 global/env properties that are specifically for the Identity Sync process:
+
+```
+site.global.idsync.user=metacodaIdSync
+site.global.idsync.pass={sas002}ThePwEncodedPassword
+site.global.idsync.logicalWorkspaceServer=SASApp - Logical Workspace Server
+```
+
+The first 2 are the SAS Metadata Server and Workspace Server login credentials for the
+Identity Sync service identity. The last one is the name of the logical SAS Workspace
+Server to use during Identity Sync processing.  
+
+They login credentials are distinct from the site.global.meta properties because you may
+want, or need, to run the Identity Sync process using a different service identity than the
+one you use for batch reporting and testing.
+In order to make changes to SAS identities, the user you specify with site.global.idsync.user
+or site.env.idsync.user needs to be at least a restricted user administrator (a direct or
+indirect member of the SAS *Metadata Server: User Administration* role, as members of the
+*SAS Administrators* group usually are).
+Furthermore, if your sync process needs to make changes to unrestricted users, or identities
+where access has been limited to unrestricted administrators, then site.global.idsync.user or
+site.env.idsync.user needs to be a member of the SAS *Metadata Server: Unrestricted* role.
+You may want to start running the process as a restricted user admin and switch to an
+unrestricted administrator only if required.
+We would also suggest you create a dedicated service identity in SAS to perform the identity
+sync process, and use an host service account, so that the SAS Workspace Server can be spawned
+using the same credentials.
+
+After configuring those properties and running the setup script you will have a skeleton
+structure for running Identity Sync against AD in batch: 
+
+```bash
+cd /opt/sas94m6/metacoda-plugins-batch-setup/site/env-default
+./run-batch-idsync-ad.sh
+```
+
+... or if you built for a Windows environment:
+
+```bash
+run-batch-idsync-ad.bat
+```
+
+The run-batch-idsync-ad.sh/bat script is the one you will configure to run in
+your preferred scheduler. It will use the batch configuration specified in the
+**site/env-default/batch-idsync-ad/idsync-ad.xml** file which will in turn run
+the identity sync process using the **site/env-default/batch-idsync-ad/idsync-ad.idsp**
+file. This is the IDSP file that you need to replace with the one you created within
+SAS Management Console. Rename your IDSP file **idsync-ad.idsp** and save it in the
+**site/env-default/batch-idsync-ad** directory overwriting the sample one that is there.
+
+You will want to review the IDSP, now it is on the server, to ensure that the values
+are correct in that context. Pay particular attention to the **Options** tag
+**auditReportFile** attribute. The value in your IDSP will probably be valid for your
+workstation but may not be valid for the server. Unless you have a specific location
+chosen, change it to **"../output/idsync-ad/idsync-ad-audit.html"**.
+You may want to configure the SAS Web Server with an alias (preferably secured) to point
+to this directory so you can access the audit reports using a web browser.    
+
+We would **strongly** advise you set the **Options** tag **applyChanges** attribute to
+**false** in your IDSP until you have the Identity Sync process running correctly with the
+audit reports showing only expected changes. You can then change it to true so that
+changes to SAS metadata start flowing when you next run the run-batch-idsync-ad.sh script. 
+
 ## Working with Multiple SAS Environments 
 
 This Metacoda Plug-ins Batch Interface Setup Utility can also be used to create customized batch

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
+<IdentitySyncProfile
+        xmlns="http://metacoda.com/xsd/plugins-idsync-profile-6"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://metacoda.com/xsd/plugins-idsync-profile-6 http://metacoda.com/xsd/plugins-idsync-profile-6.xsd">
+
+    <IdentitySource type="activeDirectoryServer"/>
+
+    <LDAPConfig protocol="ldap"
+                host="localhost"
+                port="389"
+                useStartTLS="false"
+                authMethod="simple"
+                bindUser="${site.env.idsync.user}"
+                bindPassword="${site.env.idsync.pass}"
+                followReferrals="true"
+                groupSearchDN="CN=Users,DC=corp,DC=example,DC=com"
+                groupFilter="objectCategory=Group"
+                userSearchDN="CN=Users,DC=corp,DC=example,DC=com"
+                userFilter="objectCategory=Person"
+                searchPaging="true"
+                searchPageSize="500"
+                searchLimit="0"/>
+
+    <GroupSync basis="selected"
+               namePrefixEnabled="false"
+               namePrefix="ad_"
+               nameSuffixEnabled="false"
+               nameSuffix="_ad"
+               displayNamePrefixEnabled="false"
+               displayNamePrefix="[AD]"
+               displayNameSuffixEnabled="false"
+               displayNameSuffix="[AD]">
+        <IncludedGroups>
+            <Group name="My SAS Users Group" dn="CN=My SAS Users Group,CN=Users,DC=corp,DC=example,DC=com"/>
+        </IncludedGroups>
+        <ExcludedGroups>
+        </ExcludedGroups>
+        <Roles>
+        </Roles>
+    </GroupSync>
+
+    <UserSync basis="groupMembers"
+              namePrefixEnabled="false"
+              namePrefix="ad_"
+              nameSuffixEnabled="false"
+              nameSuffix="_ad"
+              displayNamePrefixEnabled="false"
+              displayNamePrefix="[AD]"
+              displayNameSuffixEnabled="false"
+              displayNameSuffix="[AD]"
+              loginAuthDomain="DefaultAuth"
+              loginPrefixEnabled="false"
+              loginPrefix="CORP\"
+              loginSuffixEnabled="false"
+              loginSuffix="@CORP.EXAMPLE.COM"
+              login2Enabled="false"
+              login2AuthDomain="Web"
+              login2PrefixEnabled="false"
+              login2Prefix=""
+              login2SuffixEnabled="false"
+              login2Suffix=""
+              emailEnabled="true"
+              emailType="Office"
+              phoneEnabled="true"
+              phoneWorkType="Office"
+              phoneFaxType="Office Fax"
+              phoneMobileType="Mobile"
+              phoneHomeType="Home"
+              phonePagerType="Pager"
+              phoneIPType="IP Phone"
+              locationEnabled="true"
+              locationType="Office">
+        <ExcludedUsers>
+        </ExcludedUsers>
+    </UserSync>
+
+    <Options extIdTag="Active Directory Import"
+             tagDeletedIdentities="true"
+             deletedIdentityTag="DELETE"
+             metadataBackupEnabled="true"
+             auditReportEnabled="true"
+             auditReportFile="../output/idsync-ad/idsync-ad-audit.html"
+             auditReportTimestamped="true"
+             auditReportCSS=""
+             applyChanges="false"
+             debug="false"/>
+
+    <PreInitCode><![CDATA[
+/*
+PreInitCode can be used to customize the SAS workspace server environment just before Metacoda Identity Sync
+runs it's initialization code.
+*/
+  ]]></PreInitCode>
+
+    <PostInitCode><![CDATA[
+/*
+PostInitCode can be used to customize the SAS workspace server environment just after Metacoda Identity Sync
+runs it's initialization code.
+*/
+  ]]></PostInitCode>
+
+    <PreSourceExtractCode><![CDATA[
+/*
+PreSourceExtractCode can be used to customize the SAS workspace server environment just before Metacoda Identity Sync
+runs code to extract identity data from the source identity environment (e.g. IDSX file or Active Directory).
+*/
+  ]]></PreSourceExtractCode>
+
+    <PostSourceExtractCode><![CDATA[
+/*
+PostSourceExtractCode can be used to customize the SAS workspace server environment just after Metacoda Identity Sync
+runs code to extract identity data from the source identity environment (e.g. IDSX file or Active Directory).
+The source identity canonical tables will be found in a library with libref IDS_SRC.
+You can use this code to manipulate the source identity data if required.
+*/
+  ]]></PostSourceExtractCode>
+
+    <PreTargetExtractCode><![CDATA[
+/*
+PreTargetExtractCode can be used to customize the SAS workspace server environment just before Metacoda Identity Sync
+runs code to extract identity data from the target identity environment (i.e. SAS metadata server) using the
+standard SAS %MDUEXTR macro.
+*/
+  ]]></PreTargetExtractCode>
+
+    <PostTargetExtractCode><![CDATA[
+/*
+PostTargetExtractCode can be used to customize the SAS workspace server environment just after Metacoda Identity Sync
+runs code to extract identity data from the target identity environment (i.e. SAS metadata server) using the
+standard SAS %MDUEXTR macro.
+The target identity canonical tables will be found in a library with libref IDS_TGT.
+*/
+  ]]></PostTargetExtractCode>
+
+    <PreCompareCode><![CDATA[
+/*
+PreCompareCode can be used to customize the source or target identity data if required. It runs just before
+Metacoda Identity Sync uses the standard SAS %MDUCMP macro to compare source and target identities and generate
+identity change tables.
+This code has access to the exceptions table IDS_SRC.IDS_EXCEPTION (as populated from this IDSP contents).
+*/
+  ]]></PreCompareCode>
+
+    <PostCompareCode><![CDATA[
+/*
+PostCompareCode can be used to customize the identity change tables if required. It will be run just after
+Metacoda Identity Sync has used the standard SAS %MDUCMP macro, but before it validates the changes with the
+standard SAS %MDUCHGV macro.
+The identity change tables will be found in a library with libref IDS_CHG.
+*/
+  ]]></PostCompareCode>
+
+    <PreValidateCode><![CDATA[
+/*
+PreValidateCode can be used to run custom code just before Metacoda Identity Sync uses the standard
+SAS %MDUCHGV macro to validate the identity change tables.
+*/
+  ]]></PreValidateCode>
+
+    <PostValidateCode><![CDATA[
+/*
+PostValidateCode can be used to run custom code just after Metacoda Identity Sync has used the standard
+SAS %MDUCHGV macro to validate the identity change tables. Any validation errors will be found in the
+IDS_CHG.IDS_ERROR table.
+*/
+  ]]></PostValidateCode>
+
+    <PreApplyCode><![CDATA[
+/*
+PreApplyCode can be used to run custom code just before Metacoda Identity Sync applies changes to the target
+SAS metadata environment using the standard SAS %MDUCHGLB or %MDUCHGL macros.
+If the IDSP has been configured to run a SAS metadata backup before applying changes, this code runs
+after the backup has been run.
+*/
+  ]]></PreApplyCode>
+
+    <PostApplyCode><![CDATA[
+/*
+PostApplyCode can be used to run custom code just after Metacoda Identity Sync has applied changes to the target
+SAS metadata environment using the standard SAS %MDUCHGLB or %MDUCHGL macros.
+If the changes failed to apply, details will be found in the table IDS_CHG.IDS_FAILED_OBJS (when the %MDUCHGLB
+macro was used.
+*/
+  ]]></PostApplyCode>
+
+    <SyncExceptions>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;LSFADMIN&quot;"/>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;LSFUSER&quot;"/>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;SASADM&quot;"/>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;SASDEMO&quot;"/>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;SAS&quot;"/>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;SASEVS&quot;"/>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;SASGUEST&quot;"/>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;SASSEARCH&quot;"/>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;SASSRV&quot;"/>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;SASWBADM&quot;"/>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;SASTRUST&quot;"/>
+        <SyncException tableName="Person" filter="upcase(name)=&quot;WEBANON&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;BI DASHBOARD ADMINISTRATORS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;BI DASHBOARD USERS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;BI WEB SERVICES USERS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;DATA MANAGEMENT ADMINISTRATORS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;DATA MANAGEMENT BUSINESS APPROVERS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;DATA MANAGEMENT BUSINESS USERS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;DATA MANAGEMENT EXECUTIVES&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;DATA MANAGEMENT POWER USERS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;DATA MANAGEMENT STEWARDS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;PUBLIC&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;SAS GENERAL SERVERS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;SAS SYSTEM SERVICES&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;SAS_EV_APPSERVER_TIER&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;SAS_EV_GUEST&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;SAS_EV_SUPER_USER&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;SASADMINISTRATORS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;SASUSERS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;TSADMINS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;VISUAL ANALYTICS DATA ADMINISTRATORS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;VISUAL ANALYTICS USERS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;VISUAL DATA BUILDER ADMINISTRATORS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;ADD-IN FOR MICROSOFT OFFICE: ADVANCED&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;ADD-IN FOR MICROSOFT OFFICE: ANALYSIS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;ADD-IN FOR MICROSOFT OFFICE: OLAP&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;BI DASHBOARD: ADMINISTRATION&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;COMMENTS: ADMINISTRATOR&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;DATA MANAGEMENT: OPERATION&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;DATA MANAGEMENT: PROCESS ORCHESTRATION&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;DATA REMEDIATION: ISSUE ADMINISTRATION&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;DATA REMEDIATION: ISSUE MANAGEMENT&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;DATA REMEDIATION: ISSUE VIEW&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;ENTERPRISE GUIDE: ADVANCED&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;ENTERPRISE GUIDE: ANALYSIS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;ENTERPRISE GUIDE: OLAP&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;ENTERPRISE GUIDE: PROGRAMMING&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;JOB EXECUTION: JOB ADMINISTRATOR&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;JOB EXECUTION: JOB DESIGNER&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;JOB EXECUTION: JOB SCHEDULER&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;JOB EXECUTION: JOB SUBMITTER&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;JOB MONITOR: OPERATION&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;MANAGEMENT CONSOLE: ADVANCED&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;MANAGEMENT CONSOLE: CONTENT MANAGEMENT&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;META: OPERATORS ROLE&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;META: UNRESTRICTED USERS ROLE&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;META: USER AND GROUP ADMINISTRATORS ROLE&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;PROCESS ORCHESTRATION: JOB ADMINISTRATION&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;PROCESS ORCHESTRATION: JOB DEVELOPMENT&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;PROCESS ORCHESTRATION: JOB EXECUTION&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;SAS STUDIO: USAGE&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;TASK MANAGER: TASK ADMINISTRATION&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;TASK MANAGER: TASK MANAGEMENT&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;TASK MANAGER: TASK VIEW&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;THEME DESIGNER FOR FLEX: ADMINISTRATION&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;VISUAL ANALYTICS: ADMINISTRATION&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;VISUAL ANALYTICS: ANALYSIS&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;VISUAL ANALYTICS: BASIC&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;VISUAL ANALYTICS: DATA BUILDING&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;VISUAL ANALYTICS: REPORT VIEWING&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;WEB REPORT STUDIO: ADVANCED&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;WEB REPORT STUDIO: REPORT CREATION&quot;"/>
+        <SyncException tableName="IdGrps" filter="upcase(name)=&quot;WEB REPORT STUDIO: REPORT VIEWING&quot;"/>
+    </SyncExceptions>
+
+</IdentitySyncProfile>
