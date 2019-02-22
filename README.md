@@ -56,7 +56,7 @@ repository:
 ssh sas@sas94m5srv
 cd /opt/sas94m6
 git clone https://github.com/Metacoda/metacoda-plugins-batch-setup.git
-\# ... or: git clone git@github.com:Metacoda/metacoda-plugins-batch-setup.git
+# ... or: git clone git@github.com:Metacoda/metacoda-plugins-batch-setup.git
 ```
 
 Run the setup script without any parameters and it will print some environment info and
@@ -177,6 +177,7 @@ Once you have your site/env-default generated you can run all of the following s
 ```bash
 cd /opt/sas94m6/metacoda-plugins-batch-setup/site/env-default
 ./run-batch-export-html.sh 
+./run-batch-export-csv.sh 
 ./run-batch-export-sectest.sh
 ./run-batch-sectest.sh
 ```
@@ -185,12 +186,16 @@ cd /opt/sas94m6/metacoda-plugins-batch-setup/site/env-default
 
 ```bash
 run-batch-export-html.bat 
+run-batch-export-csv.bat 
 run-batch-export-sectest.bat
 run-batch-sectest.bat
 ```
 
 The run-batch-export-html.sh/bat script generates a series of SAS Metadata Security HTML reports
 under the **site/env-default/output/html** directory.  
+
+The run-batch-export-csv.sh/bat script exports a series of simple SAS Metadata Security CSV
+files under the **site/env-default/output/csv** directory.  
 
 The run-batch-export-sectest.sh/bat script exports a series of Metadata Security Test XML files 
 in the **site/env-default/output/sectest** directory. These XML files can be used for 
