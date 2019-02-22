@@ -37,7 +37,7 @@
         A Filter tag can be used to subset the export using either a simple text-based filter,
         or an Advanced Expression-based Filter (specified with a #@ prefix).
         -->
-        <!--<Filter>Admin</Filter>-->
+        <!--<Filter>SAS</Filter>-->
         <!--<Filter>#@ userId.startsWith("Admin")</Filter>-->
     </SecTestInternalLoginExport>
 </BatchConfig>

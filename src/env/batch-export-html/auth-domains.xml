@@ -38,7 +38,7 @@
         A Filter tag can be used to subset the export using either a simple text-based filter,
         or an Advanced Expression-based Filter (specified with a #@ prefix).
         -->
-        <!--<Filter>Oracle</Filter>-->
+        <!--<Filter>Default</Filter>-->
         <!--<Filter>#@ hasLibraries</Filter>-->
     </AuthDomainReviewerExport>
 </BatchConfig>

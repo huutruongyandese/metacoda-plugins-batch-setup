@@ -38,7 +38,7 @@
         A Filter tag can be used to subset the export using either a simple text-based filter,
         or an Advanced Expression-based Filter (specified with a #@ prefix).
         -->
-        <!--<Filter>Vegas</Filter>-->
+        <!--<Filter>Metadata Server</Filter>-->
         <!--<Filter>#@ isEmpty</Filter>-->
     </RoleReviewerExport>
 </BatchConfig>
