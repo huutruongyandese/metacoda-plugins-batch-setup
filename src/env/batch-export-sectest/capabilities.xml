@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (c) 2007-2019 Metacoda Group Pty Ltd. -->
+<!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
 <BatchConfig xmlns="http://metacoda.com/xsd/plugins-batchconfig-6"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://metacoda.com/xsd/plugins-batchconfig-6 http://metacoda.com/xsd/plugins-batchconfig-6.xsd"
