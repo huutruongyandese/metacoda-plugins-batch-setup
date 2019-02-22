@@ -2,7 +2,7 @@
 <!-- Copyright (c) 2019 Metacoda Group Pty Ltd. -->
 <BatchConfig xmlns="http://metacoda.com/xsd/plugins-batchconfig-6"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://metacoda.com/xsd/plugins-batchconfig-6 http://metacoda.com/xsd/plugins-batchconfig-6.xsd"
+             xsi:schemaLocation="http://metacoda.com/xsd/plugins-batchconfig-6 https://metacoda.com/xsd/plugins-batchconfig-6.xsd"
              taskClass="com.metacoda.smc.batch.CapabilityReviewerExportTask"
              sendExceptionEmail="${site.env.smtp.enabled}">
     <!--

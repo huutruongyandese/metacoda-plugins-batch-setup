@@ -3,7 +3,7 @@
 <IdentitySyncProfile
         xmlns="http://metacoda.com/xsd/plugins-idsync-profile-6"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://metacoda.com/xsd/plugins-idsync-profile-6 http://metacoda.com/xsd/plugins-idsync-profile-6.xsd">
+        xsi:schemaLocation="http://metacoda.com/xsd/plugins-idsync-profile-6 https://metacoda.com/xsd/plugins-idsync-profile-6.xsd">
 
     <IdentitySource type="activeDirectoryServer"/>
 
