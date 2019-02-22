@@ -6,6 +6,9 @@ This repository provides a utility to help Metacoda customers and partners setup
 Batch Interface for [Metacoda® Security Plug-ins](https://www.metacoda.com/en/products/security-plug-ins/)
 with [SAS®](https://www.sas.com/) software.
 
+It can be used with Metacoda Plug-ins version 6.1 R1 onwards with SAS Software versions 9.2, 9.3,
+and 9.4.
+
 The Metacoda Plug-ins Batch Interface is used to automate and schedule activities that you might
 otherwise do manually using Metacoda Plug-ins inside SAS Management Console. This can include:
 * Exporting HTML reports to document a SAS metadata security implementation (ACTs, ACEs, Users, 
