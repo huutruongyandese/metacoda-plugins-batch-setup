@@ -43,7 +43,7 @@ if [ ! -x ${JREHOME}/bin/java ]; then
 fi
 
 # Build up Java Options
-javaopts="$javaopts -Dcom.metacoda.plugins.userPrefsFile=$userprefsxml"
+javaopts="-Dcom.metacoda.plugins.userPrefsFile=$userprefsxml"
 javaopts="$javaopts -Djava.security.egd=file:/dev/./urandom"
 #javaopts="$javaopts -Dcom.metacoda.common.exportAnonymous=true"
 #javaopts="$javaopts -Dcom.metacoda.plugins.systemPrefsFile=$sysprefsxml"
