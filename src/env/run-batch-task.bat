@@ -1,4 +1,6 @@
 @echo off
+setlocal
+
 rem Copyright (c) 2019 Metacoda Group Pty Ltd.
 rem Runs a Metacoda Plug-ins batch task
 
@@ -44,7 +46,7 @@ if not exist "%JREHOME%\bin\java.exe" (
 )
 
 rem Build up Java Options
-set javaopts=%javaopts% -Dcom.metacoda.plugins.userPrefsFile="%userprefsxml%"
+set javaopts=-Dcom.metacoda.plugins.userPrefsFile="%userprefsxml%"
 rem set javaopts=%javaopts% -Dcom.metacoda.common.exportAnonymous=true
 set javaopts=%javaopts% -Dcom.metacoda.smc.licenseFile="%dir%metacoda-plugins-v6.lic"
 rem set javaopts=%javaopts% -Dfile.encoding=utf-8

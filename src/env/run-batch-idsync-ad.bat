@@ -1,4 +1,6 @@
 @echo off
+setlocal
+
 rem Copyright (c) 2019 Metacoda Group Pty Ltd.
 rem Runs a batch Metacoda Plug-ins Identity Sync using an Active Directory source.
 

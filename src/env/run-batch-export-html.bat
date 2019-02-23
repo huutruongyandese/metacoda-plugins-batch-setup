@@ -1,4 +1,6 @@
 @echo off
+setlocal
+
 rem Copyright (c) 2019 Metacoda Group Pty Ltd.
 rem Runs all Metacoda Plug-ins Batch HTML exports in turn.
 
