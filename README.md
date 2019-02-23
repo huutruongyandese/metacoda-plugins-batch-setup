@@ -52,8 +52,8 @@ scheduled, and any generated HTML reports made accessible via the SAS Web Server
 
 ## Getting Started
 
-To get started, log onto the machine where you want to run the setup script and clone this
-repository:
+To get started, log onto the machine where you want to run the setup script, choose
+a target directory, and clone this repository:
 
 ```bash
 ssh sas@sas94m5srv
@@ -62,12 +62,21 @@ git clone https://github.com/Metacoda/metacoda-plugins-batch-setup.git
 # ... or: git clone git@github.com:Metacoda/metacoda-plugins-batch-setup.git
 ```
 
+If you don't have a git client on the machine you can also download a zip file
+of the repository from GitHub.
+
 Run the setup script without any parameters and it will print some environment info and
-some help (use setup.bat on Windows platforms).
+some help:
 
 ```bash
 cd /opt/sas94m6/metacoda-plugins-batch-setup
 ./setup.sh
+```
+... and for Windows platforms:
+
+```
+cd C:\metacoda-plugins-batch-setup
+setup.bat
 ```
 
 It will automatically use the system/configured Java Runtime Environment (JRE), so if you want
@@ -76,6 +85,11 @@ to force the use of a specific JRE then set JAVA_HOME first e.g.
 ```bash
 export JAVA_HOME=/opt/sas94m6/sashome/SASPrivateJavaRuntimeEnvironment/9.4/jre
 ./setup.sh
+```
+... and for Windows platforms:
+```
+set JAVA_HOME=C:\Program Files\SASHome\SASPrivateJavaRuntimeEnvironment\9.4\jre
+setup.bat 
 ```
 
 To create customized batch scripts for a SAS environment use the **create-env** action/target:
@@ -121,10 +135,15 @@ site.global.meta.host=localhost
 site.global.meta.port=8561
 site.global.meta.user=sasadm@saspw
 site.global.meta.pass={sas002}ThePwEncodedPassword
+site.global.idsync.user=metacodaIdSync
+site.global.idsync.pass={sas002}ThePwEncodedPassword
+site.global.idsync.logicalWorkspaceServer=SASApp - Logical Workspace Server
 ```
 
-You will probably need to change site.global.sashome, site.global.meta.host
-and, of course, site.global.meta.pass
+You will probably need to change site.global.sashome, site.global.meta.host and, of course,
+site.global.meta.pass. If you are going to use Metacoda Identity Sync in batch you will also
+need to change site.global.idsync.user, site.global.idsync.pass, and optionally
+site.global.idsync.logicalWorkspaceServer. 
 
 ## Metacoda Plug-ins JAR and License
 
@@ -188,7 +207,8 @@ cd /opt/sas94m6/metacoda-plugins-batch-setup/site/env-default
 
 ... or if you built for a Windows environment:
 
-```bash
+```
+cd C:\metacoda-plugins-batch-setup\site\env-default
 run-batch-export-html.bat 
 run-batch-export-csv.bat 
 run-batch-export-sectest.bat
@@ -240,7 +260,7 @@ The first 2 are the SAS Metadata Server and Workspace Server login credentials f
 Identity Sync service identity. The last one is the name of the logical SAS Workspace
 Server to use during Identity Sync processing.  
 
-They login credentials are distinct from the site.global.meta properties because you may
+The login credentials are distinct from the site.global.meta properties because you may
 want, or need, to run the Identity Sync process using a different service identity than the
 one you use for batch reporting and testing.
 In order to make changes to SAS identities, the user you specify with site.global.idsync.user
@@ -266,7 +286,8 @@ cd /opt/sas94m6/metacoda-plugins-batch-setup/site/env-default
 
 ... or if you built for a Windows environment:
 
-```bash
+```
+cd C:\metacoda-plugins-batch-setup\site\env-default
 run-batch-idsync-ad.bat
 ```
 
