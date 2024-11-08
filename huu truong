@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IdentitySyncProfile ...>
+  <IdentitySource type="activeDirectoryServer"/>
+  <LDAPConfig ... />
+  <GroupSync ...> 
+    <IncludedGroups>
+      <Group name="Group1" ... />
+      <Group name="Group2" ... />
+      ...
+    </IncludedGroups>
+  </GroupSync>
+  <UserSync ... />
+  <Options ... />
+  <SyncExceptions>
+    <SyncException ... />
+    ...
+  </SyncExceptions>
+</IdentitySyncProfile>
+The <IdentitySource> tag indicates the source for identities, in this case AD.
+The <LDAPConfig> contains details of how to connect to AD: host name, port, protocol, credentials, whether to use encryption, base DNs and filters for search, attribute mappings etc.
+The <GroupSync> tag specifies the basis for identifying targeted groups, excluded groups, and general group related options.
+The <UserSync> tag specifies the basis for identifying targeted users, excluded users, and general user related options.
+The <Options> tag has some generic options for the sync process.
+The <SyncExceptions> tag is used to specify any identities to be ignored.
